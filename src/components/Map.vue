@@ -1,5 +1,6 @@
 <template>
   <div class="map" id="map-container" ref="mapContainer">
+  <Print :map="map"/>
   </div>
 </template>
 
@@ -19,9 +20,14 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import {Fill, Stroke, Style} from 'ol/style';
+import Print from './Print.vue';
+
 
 export default {
   name: 'Map',
+  components: {
+    Print
+  },
   created() {
     proj4.defs("EPSG:28992","+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.417,50.3319,465.552,-0.398957,0.343988,-1.8774,4.0725 +units=m +no_defs");
     register(proj4);
@@ -31,6 +37,7 @@ export default {
         new TileLayer({
           visible: true,
           source: new WMTSSource({
+            crossOrigin: 'anonymous',
             url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts?',
             layer: 'brtachtergrondkaart',
             matrixSet: 'EPSG:28992',
@@ -46,6 +53,7 @@ export default {
         new TileLayer({
           visible: false,
           source: new WMTSSource({
+            crossOrigin: 'anonymous',
             url: 'https://geodata.nationaalgeoregister.nl/luchtfoto/rgb/wmts',
             layer: '2018_ortho25',
             matrixSet: 'EPSG:28992',
@@ -61,6 +69,7 @@ export default {
         new TileLayer({
           visible: false,
           source: new TileWMS({
+            crossOrigin: 'anonymous',
             url: 'https://services.rce.geovoorziening.nl/rce/wfs?',
             params: {
               LAYERS: 'rce:NationalListedMonuments',
@@ -97,6 +106,7 @@ export default {
   },
   mounted() {
     this.map.setTarget(this.$refs.mapContainer);
+    this.$root.$emit('map', this.map);
   },
   props: {
   }

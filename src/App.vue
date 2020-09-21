@@ -1,9 +1,9 @@
 <template>
-  <Map />
+    <Map/>
 </template>
 
 <script>
-import Map from './components/Map.vue'
+import Map from './components/Map.vue';
 
 export default {
   name: 'App',
